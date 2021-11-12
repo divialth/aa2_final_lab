@@ -1,0 +1,14 @@
+---
+- name: Play to setup Load Balancer
+  hosts: load_balancers
+  tasks:
+    - name: Setup firewall
+      include_role:
+        name: firewall
+      vars:
+        firewall_services:
+          - http
+
+    - name: Setup HAproxy server
+      include_role:
+        name: haproxy
