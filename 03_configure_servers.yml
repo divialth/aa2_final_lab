@@ -17,7 +17,6 @@
     dns_servers: 192.168.50.187
 
   tasks:
-    - debug: var=hostvars
     - name: Insert DNS IP
       command: >-
         nmcli connection modify "System eth0"
