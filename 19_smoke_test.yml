@@ -22,11 +22,12 @@
   tasks:
     - name: Smoketest Load Balancer
       uri:
-        url: "http://{{ item }}/ping"
+        url: "http://{{ hostvars['frontend1'].ansible_host }}/ping"
         return_content: yes
       until: '"alive" in result.content'
       retries: 10
       delay: 1
       register: result
       delegate_to: localhost
-      loop: "{{ groups.load_balancers }}"
+
+    - debug: var=result
