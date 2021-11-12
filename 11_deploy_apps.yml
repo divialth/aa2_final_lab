@@ -19,4 +19,4 @@
 
     - name: Install web application server
       include_role:
-        name: flask-app-server
+        name: flask
