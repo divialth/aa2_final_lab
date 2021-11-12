@@ -2,8 +2,6 @@
   hosts: database_servers
   gather_facts: true
   become: true
-  tags:
-    - smoketest  
 
   tasks:
     - name: Smoketest Postgres database
@@ -15,4 +13,20 @@
         ssl_mode: disable
       loop: "{{ groups.database_servers }}"
       delegate_to: "{{ item }}"
-      
+
+- name: Smoke Test - End to End - LB Servers
+  hosts: load_balancers
+  gather_facts: true
+  become: true
+
+  tasks:
+    - name: Smoketest Load Balancer
+      uri:
+        url: "http://{{ item }}/ping"
+        return_content: yes
+      until: '"alive" in result.content'
+      retries: 10
+      delay: 1
+      register: result
+      delegate_to: localhost
+      loop: "{{ groups.load_balancers }}"
