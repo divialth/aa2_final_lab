@@ -1,0 +1,32 @@
+---
+- name: Play to setup postgresql server
+  hosts: database_servers
+  tasks:
+    - debug:
+        msg: "Start postgresql server setup"
+
+    - name: Setup firewall
+      include_role:
+        name: firewall
+      vars:
+        firewall_services:
+          - postgresql
+
+    - name: Setup postgresql server
+      include_role:
+        name: postgresql-server
+      vars:
+        postgres_users:
+          - name: flask
+            password: redhat
+            database: flask_db
+            state: present
+            priv: ALL
+        postgres_databases:
+          - name: flask_db
+            owner: flask
+          - name: books_store
+            owner: flask
+
+    - debug:
+        msg: "Finished postgresql server setup"
