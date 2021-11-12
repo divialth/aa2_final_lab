@@ -12,6 +12,7 @@
 - name: update resolve.conf
   hosts: load_balancers,backend_servers,database_servers
   become: true
+
   tasks:
     - name: Insert DNS IP
       command: >-
@@ -25,3 +26,25 @@
       service:
         name: NetworkManager
         state: restarted
+
+- name: register to satellite
+  hosts: load_balancers,backend_servers,database_servers
+  become: true
+
+  vars:
+    satellite_activationkey: gpte-labs-rhel8
+    satellite_org: prod
+  
+  tasks:
+    - name: install katello-ca-consumer package
+      yum:
+        name: http://satellite.example.com/pub/katello-ca-consumer-latest.noarch.rpm
+        state: present
+        disable_gpg_check: true
+
+    - name: register system and attach subs
+      redhat_subscription:
+        state: present
+        activationkey: "{{ satellite_activationkey }}"
+        org_id: "{{ satellite_org }}"
+        auto_attach: true
