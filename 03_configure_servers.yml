@@ -13,13 +13,16 @@
   hosts: load_balancers,backend_servers,database_servers
   become: true
 
+  vars:
+    dns_servers: 192.168.50.187
+
   tasks:
     - debug: var=hostvars
     - name: Insert DNS IP
       command: >-
         nmcli connection modify "System eth0"
         ipv4.ignore-auto-dns yes
-        ipv4.dns {{ hostvars.control_node.ansible_default_ipv4.address }}
+        ipv4.dns {{ dns_servers }}
 
     - name: Restart NetworkManager
       service:
