@@ -37,6 +37,12 @@
     insertafter: "#listen_addresses"
   notify: restart_postgres
 
+- name: Setup Postgres as started and enabled on boot.
+  service:
+    name: "{{ postgres_service }}"
+    state: "{{ postgres_service_state | default('started') }}"
+    enabled: "{{ postgres_service_enabled | default(true) }}"
+
 - name: Configure Postgres resources, user, database etc 
   block:
 

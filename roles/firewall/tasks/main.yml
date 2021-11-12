@@ -11,7 +11,6 @@
     state: started
     
 - name: Open service port
-  when: firewall_services is defined
   firewalld:
     service: "{{ __service }}"
     state: enabled
@@ -20,9 +19,9 @@
   loop: "{{ firewall_services }}"
   loop_control:
     loop_var: __service
+  when: firewall_services is defined
 
 - name: Open tcp port
-  when: firewall_tcp_ports is defined
   firewalld:
     port: "{{ __tcp_port }}/tcp"
     permanent: yes
@@ -31,9 +30,9 @@
   loop: "{{ firewall_tcp_ports }}"
   loop_control:
     loop_var: __tcp_port
+  when: firewall_tcp_ports is defined
 
-- name: Open tcp port
-  when: firewall_udp_ports is defined
+- name: Open udp port
   firewalld:
     port: "{{ __udp_port }}/udp"
     permanent: yes
@@ -42,3 +41,4 @@
   loop: "{{ firewall_udp_ports }}"
   loop_control:
     loop_var: __udp_port
+  when: firewall_udp_ports is defined
