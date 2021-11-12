@@ -1,0 +1,18 @@
+- name: Smoke Test - End to End - Database Servers
+  hosts: database_servers
+  gather_facts: true
+  become: true
+  tags:
+    - smoketest  
+
+  tasks:
+    - name: Smoketest Postgres database
+      postgresql_ping:
+        db: flask_db
+        login_host: "127.0.0.1"
+        login_user: flask
+        login_password: redhat
+        ssl_mode: disable
+      loop: "{{ groups.database_servers }}"
+      delegate_to: "{{ item }}"
+      
