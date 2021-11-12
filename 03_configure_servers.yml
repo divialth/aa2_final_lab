@@ -18,7 +18,7 @@
       command: >-
         nmcli connection modify "System eth0"
         ipv4.ignore-auto-dns yes
-        ipv4.dns {{ hostvars.localhost.ansible_default_ipv4.address }}
+        ipv4.dns {{ hostvars.control_node.ansible_default_ipv4.address }}
 
     - name: Restart NetworkManager
       service:
