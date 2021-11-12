@@ -24,9 +24,11 @@
       uri:
         url: "http://{{ item }}/ping"
         return_content: yes
-      until: '"alive" in result.content'
+      #until: '"alive" in result.content'
       retries: 10
       delay: 1
       register: result
       delegate_to: localhost
       loop: "{{ groups.load_balancers }}"
+
+    - debug: var=result
